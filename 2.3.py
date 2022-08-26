@@ -10,6 +10,8 @@ class Dog:
         return f"{self.name} says {sound}"
 
 
+# ---
+
 class Stack:
     def __init__(self):
         self.values = []
@@ -35,6 +37,8 @@ class Stack:
     def size(self):
         return len(self.values)
 
+
+# ---
 
 class Worker:
     def __init__(self, name, salary, gender, passport):
@@ -69,3 +73,79 @@ for worker in worker_objects:
     Worker.get_info(worker)
 
 
+# ---
+
+class CustomLabel:
+    def __init__(self, text, **kwargs):
+        self.text = text
+        self.config(**kwargs)
+
+    def config(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+# ---
+
+class Battery:
+
+    def __init__(self, battery_size=70):
+        self.battery_size = battery_size
+
+    def describe_battery(self):
+        print(self.battery_size)
+
+
+class Rule:
+
+    def __init__(self, rule_size=50):
+        self.rule_size = rule_size
+
+    def describe_rule(self):
+        print(self.rule_size)
+
+
+class Trunc:
+
+    def __init__(self, trunc_size=50):
+        self.trunc_size = trunc_size
+
+    def describe_rule(self):
+        print(self.trunc_size)
+
+
+class Car:
+    def __init__(self, name='volvo cars'):
+        self.name = name
+        self.trunc = Trunc()
+        self.rule = Rule()
+        self.battery = Battery()
+
+    def describe_car(self):
+        print(self.name)
+
+
+# ---
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def display_person_info(self):
+        print(f"Person: {self.name}, {self.age}")
+
+
+class Company:
+    def __init__(self, company_name, location):
+        self.company_name = company_name
+        self.location = location
+
+    def display_company_info(self):
+        print(f"Company: {self.company_name}, {self.location}")
+
+
+class Employee:
+    def __init__(self, name, age, company_name, location):
+        self.personal_data = Person(name, age)
+        self.work = Company(company_name, location)
