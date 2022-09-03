@@ -1,6 +1,6 @@
 # property practice
 
-from string import digits
+# from string import digits, ascii_letters
 
 
 class User:
@@ -59,16 +59,51 @@ class User:
 #
 # print(q.password)
 
+# ---
+
+from string import digits, ascii_letters
+
 
 class Registration:
-    def __init__(self, login):
+    def __init__(self, login, password):
         self.login = login
+        self.password = password
 
     @staticmethod
     def has_symbol(value, symbol):
         if symbol in value:
             return True
         return False
+
+    @staticmethod
+    def is_include_digit(value):
+        flag = False
+        for i in value:
+            if i in digits:
+                flag = True
+        return flag
+
+    @staticmethod
+    def is_include_all_register(value):
+        if value != value.lower() and value != value.upper():
+            return True
+        return False
+
+    @staticmethod
+    def is_include_only_latin(value):
+        flag = False
+        for i in value:
+            if i in ascii_letters:
+                flag = True
+        return flag
+
+    @staticmethod
+    def check_password_dictionary(value, dict):
+        with open(dict, 'r', encoding='utf-8') as file:
+            for line in file:
+                if value == line.strip():
+                    return True
+            return False
 
     @property
     def login(self):
@@ -82,18 +117,37 @@ class Registration:
         if not Registration.has_symbol(value, '.'):
             raise ValueError("Логин должен содержать символ '.'")
 
-        if value.find('@') < value.find('.'):
+        if value.find('@') > value.find('.'):
             raise ValueError("Говёный email - как можно записать такой логин?")
 
         else:
             self.__login = value
 
+    @property
+    def password(self):
+        return self.__password
 
-# r1 = Registration('qwerty@rambler.ru')  # здесь хороший логин
-# print(r1.login)  # qwerty@rambler.ru
+    @password.setter
+    def password(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Пароль должен быть строкой")
 
-# # теперь пытаемся запись плохой логин
-# r1.login = '123456'  # ValueError("Логин должен содержать один символ '@'")
+        if not 4 < len(value) < 12:
+            raise ValueError('Пароль должен быть длиннее 4 и меньше 12 символов')
 
-# r2 = Registration('qwerty.ru')  # ValueError("Логин должен содержать один символ '@'")
-# r3 = Registration('qwerty@ru')  # ValueError("Логин должен содержать символ '.'")
+        if not Registration.is_include_digit(value):
+            raise ValueError('Пароль должен содержать хотя бы одну цифру')
+
+        if not Registration.is_include_all_register(value):
+            raise ValueError('Пароль должен содержать хотя бы один символ верхнего и нижнего регистра')
+
+        if not Registration.is_include_only_latin(value):
+            raise ValueError('Пароль должен содержать только латинский алфавит')
+
+        if Registration.check_password_dictionary(value, 'easy_passwords.txt'):
+            raise ValueError('Ваш пароль содержится в списке самых легких')
+
+        else:
+            self.__password = value
+
+
